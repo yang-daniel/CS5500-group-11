@@ -1,4 +1,4 @@
-
+package app;
 /**
  * This class represent the Options that this applications offers.
  *Main purpose is reusability.
