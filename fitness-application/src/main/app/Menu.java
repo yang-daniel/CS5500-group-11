@@ -1,4 +1,4 @@
-package app;
+package main.app;
 
 import java.util.ArrayList;
 
@@ -43,16 +43,16 @@ public class Menu {
     displayMenu(MenuOptions);
 
     int userChoice;
-    int EXIT = 0;
+    int exit_int = 0;
 
     // Create a keyboard object for input validation.
     Keyboard key = new Keyboard();
 
-    userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", EXIT,
+    userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", exit_int,
         MenuOptions.size());
 
     // Menu loop.
-    while (userChoice != EXIT) {
+    while (userChoice != exit_int) {
 
       // just to demonstrate i saved the choice of the user and can use it to query
       // the db.
@@ -61,7 +61,7 @@ public class Menu {
       // Display menu again.
       displayMenu(MenuOptions);
 
-      userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", EXIT,
+      userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", exit_int,
           MenuOptions.size());
 
     }
@@ -74,7 +74,7 @@ public class Menu {
 
     AppOptions option = menuOptions.get(userChoice - 1);
 
-    System.out.printf("Here is the Option You chose: %s\n", option.getName());
+    System.out.printf("Here is the option you chose: %s\n", option.getName());
 
   }
 
