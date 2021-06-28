@@ -1,4 +1,4 @@
-package main;
+package main.client;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -13,26 +13,15 @@ import org.bson.Document;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-
 @SpringBootApplication
-public class FitnessAppApplication {
+public class MongoDBClient implements IMongoDBClient{
 
 	public static final String CONNECTION_STRING = "mongodb+srv://dbAdmin:Y28Yl3Y2KPutVfwD@cluster0.03g61.mongodb.net/Activities?retryWrites=true&w=majority";
 	public static final String DATABASE_NAME = "Activities";
 	public static final String COLLECTION_NAME = "Project";
 	public static MongoCollection<Document> collection;
 
-	public static void main(String[] args) {
-		boolean success = setup();
-		System.out.println("Connection success: " + success);
-		//SpringApplication.run(FitnessAppApplication.class, args);
-		System.out.println(getRangeCalories("20130222", "20130224"));
-		System.out.println(getRangeSteps("20130222", "20130312"));
-		System.out.println(getDayCalories("20130222"));
-		System.out.println(getDaySteps("20130222"));
-	}
-
-	public static boolean setup() {
+	public boolean setup() {
 		MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
 		MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 		collection = database.getCollection(COLLECTION_NAME);
@@ -42,14 +31,14 @@ public class FitnessAppApplication {
 	/*
 	gets count of documents in collection
 	 */
-	public static void getCount() {
+	public void getCount() {
 		System.out.println(collection.countDocuments());
 	}
 
 	/*
 	prints all documents in collection in Json format
 	 */
-	public static void printAll() {
+	public void printAll() {
 		MongoCursor<Document> cursor = collection.find().iterator();
 		try {
 			while (cursor.hasNext()) {
@@ -64,7 +53,7 @@ public class FitnessAppApplication {
 	returns document of specific day
 	format for day is yyyyMMdd
 	 */
-	public static Document getDay(String day) {
+	public Document getDay(String day) {
 		Document myDay = collection.find(Filters.eq("date", day)).first();
 		return myDay;
 	}
@@ -72,7 +61,7 @@ public class FitnessAppApplication {
 	/*
 	prints specific day in Json format
 	 */
-	public static void printDay(String day) {
+	public void printDay(String day) {
 		Document myDay = getDay(day);
 		System.out.println(myDay.toJson());
 	}
@@ -80,7 +69,7 @@ public class FitnessAppApplication {
 	/*
 	returns the calories (nonidle) of a specific day
 	 */
-	public static int getDayCalories(String day) {
+	public int getDayCalories(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
 		Document tempDoc = (Document) tempArray.get(0);
@@ -91,7 +80,7 @@ public class FitnessAppApplication {
 	/*
 	returns the steps taken of a specific day
 	 */
-	public static int getDaySteps(String day) {
+	public int getDaySteps(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
 		Document tempDoc = (Document) tempArray.get(0);
@@ -100,7 +89,7 @@ public class FitnessAppApplication {
 		//tempObj.getClass().getField("steps");
 	}
 
-	public static LocalDate stringToLocalDate(String day) {
+	public LocalDate stringToLocalDate(String day) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		return LocalDate.parse(day, formatter);
 	}
@@ -109,7 +98,7 @@ public class FitnessAppApplication {
 		gets range of Calories on dates. Note endDay is exclusive.
 	  TODO: testing for non-existent dates // dates out of range
 	 */
-	public static int getRangeCalories(String startDay, String endDay) {
+	public int getRangeCalories(String startDay, String endDay) {
 		return rangeCaloriesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}
 
@@ -117,7 +106,7 @@ public class FitnessAppApplication {
 	helper function for iterating through dates and getting calories
 	TODO: can probably be abstracted more for DRY principals
 	 */
-	public static int rangeCaloriesIterator(LocalDate start, LocalDate end) {
+	public int rangeCaloriesIterator(LocalDate start, LocalDate end) {
 		int totalCalories = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
 			//System.out.println(date.toString().replaceAll("-",""));
@@ -130,7 +119,7 @@ public class FitnessAppApplication {
   gets range of steps on dates. Note endDay is exclusive.
   TODO: testing for non-existent dates // dates out of range
  */
-	public static int getRangeSteps(String startDay, String endDay) {
+	public int getRangeSteps(String startDay, String endDay) {
 		return rangeStepsIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}
 
@@ -138,7 +127,7 @@ public class FitnessAppApplication {
 	helper function for iterating through dates and getting steps
 	TODO: can probably be abstracted more for DRY principals
  */
-	public static int rangeStepsIterator(LocalDate start, LocalDate end) {
+	public int rangeStepsIterator(LocalDate start, LocalDate end) {
 		int totalSteps = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
 			//System.out.println(date.toString().replaceAll("-",""));

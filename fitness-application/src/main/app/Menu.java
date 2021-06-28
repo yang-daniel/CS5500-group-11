@@ -1,6 +1,12 @@
 package main.app;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import main.app.menu_options.CalorieMenu;
+import main.app.menu_options.IAppOptions;
+import main.app.menu_options.RewardMenu;
+import main.app.menu_options.StepMenu;
 
 /**
  * This class represent the Menu display.
@@ -12,7 +18,7 @@ public class Menu {
    * This method displays the menu.
    * @param appOptions - the options of the Menu
    */
-  public static void displayMenu(ArrayList<AppOptions> appOptions) {
+  public static void displayMenu(List<IAppOptions> appOptions) {
 
     // Display Menu Options
     System.out.println("M E N U   OPTIONS");
@@ -21,7 +27,7 @@ public class Menu {
     // loop through the options
     for (int i = 0; i < appOptions.size(); i++) {
 
-      AppOptions option = appOptions.get(i);
+      IAppOptions option = appOptions.get(i);
       System.out.printf("%d.  %s\n", i + 1, option.getName());
 
     }
@@ -33,14 +39,18 @@ public class Menu {
 
   public static void main(String[] args) {
 
-    ArrayList<AppOptions> MenuOptions = new ArrayList<AppOptions>();
+    List<IAppOptions> menuOptions = new ArrayList<IAppOptions>();
+    IAppOptions calMenu = new CalorieMenu();
+    IAppOptions stepMenu = new StepMenu();
+    IAppOptions rewardsMenu = new RewardMenu();
+    
 
     // Options Menu data
-    MenuOptions.add(new AppOptions("Calories"));
-    MenuOptions.add(new AppOptions("Steps"));
-    MenuOptions.add(new AppOptions("Rewards"));
+    menuOptions.add(calMenu);
+    menuOptions.add(stepMenu);
+    menuOptions.add(rewardsMenu);
 
-    displayMenu(MenuOptions);
+    displayMenu(menuOptions);
 
     int userChoice;
     int exit_int = 0;
@@ -48,21 +58,27 @@ public class Menu {
     // Create a keyboard object for input validation.
     Keyboard key = new Keyboard();
 
-    userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", exit_int,
-        MenuOptions.size());
+    userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", exit_int, menuOptions.size());
 
     // Menu loop.
     while (userChoice != exit_int) {
 
       // just to demonstrate i saved the choice of the user and can use it to query
       // the db.
-      printUserChoice(userChoice, MenuOptions);
+      IAppOptions chosenMenuItem = menuOptions.get(userChoice - 1);
+      printUserChoice(chosenMenuItem);
+
+      chosenMenuItem.run();
+
+      System.out.println();
+      System.out.println();
+      
 
       // Display menu again.
-      displayMenu(MenuOptions);
+      displayMenu(menuOptions);
 
       userChoice = key.readInteger("Enter choice : ", "Error: Invalid input", exit_int,
-          MenuOptions.size());
+          menuOptions.size());
 
     }
     System.out.println("GoodBye....");
@@ -70,12 +86,8 @@ public class Menu {
 
   }
 
-  private static void printUserChoice(int userChoice, ArrayList<AppOptions> menuOptions) {
-
-    AppOptions option = menuOptions.get(userChoice - 1);
-
+  private static void printUserChoice(IAppOptions option) {
     System.out.printf("Here is the option you chose: %s\n", option.getName());
-
   }
 
 }
