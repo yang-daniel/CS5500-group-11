@@ -10,7 +10,7 @@ public class Keyboard {
 
   private Scanner in;
 
-  Keyboard() {
+  public Keyboard() {
     in = new Scanner(System.in);
   }
 

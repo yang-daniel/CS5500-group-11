@@ -7,6 +7,8 @@ import main.app.menu_options.CalorieMenu;
 import main.app.menu_options.IAppOptions;
 import main.app.menu_options.RewardMenu;
 import main.app.menu_options.StepMenu;
+import main.client.IMongoDBClient;
+import main.client.MongoDBClient;
 
 /**
  * This class represent the Menu display.
@@ -39,10 +41,13 @@ public class Menu {
 
   public static void main(String[] args) {
 
+    IMongoDBClient client = new MongoDBClient();
+
     List<IAppOptions> menuOptions = new ArrayList<IAppOptions>();
-    IAppOptions calMenu = new CalorieMenu();
-    IAppOptions stepMenu = new StepMenu();
-    IAppOptions rewardsMenu = new RewardMenu();
+    IAppOptions calMenu = new CalorieMenu(client);
+    IAppOptions stepMenu = new StepMenu(client);
+    IAppOptions rewardsMenu = new RewardMenu(client);
+
     
 
     // Options Menu data
