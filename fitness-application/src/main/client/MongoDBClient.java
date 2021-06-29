@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import org.bson.Document;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MongoDBClient implements IMongoDBClient{
@@ -31,22 +31,24 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	gets count of documents in collection
 	 */
-	public void getCount() {
-		System.out.println(collection.countDocuments());
+	public int getCount() {
+		return (int) collection.countDocuments();
 	}
 
 	/*
 	prints all documents in collection in Json format
 	 */
-	public void printAll() {
+	public String printAll() {
 		MongoCursor<Document> cursor = collection.find().iterator();
+		StringBuffer allDocs = new StringBuffer();
 		try {
 			while (cursor.hasNext()) {
-				System.out.println(cursor.next().toJson());
+				allDocs.append(cursor.next().toJson());
 			}
 		} finally {
 			cursor.close();
 		}
+		return allDocs.toString();
 	}
 
 	/*
@@ -55,36 +57,69 @@ public class MongoDBClient implements IMongoDBClient{
 	 */
 	public Document getDay(String day) {
 		Document myDay = collection.find(Filters.eq("date", day)).first();
-		return myDay;
+		if (myDay == null) {
+			throw new IndexOutOfBoundsException("Date does not exist!!");
+		}
+		return  myDay;
 	}
 
 	/*
 	prints specific day in Json format
 	 */
-	public void printDay(String day) {
+	public String printDay(String day) {
+		StringBuilder stringDay = new StringBuilder();
 		Document myDay = getDay(day);
-		System.out.println(myDay.toJson());
+		stringDay.append(myDay.toJson());
+
+		if (stringDay.length() == 0) {
+			throw new IndexOutOfBoundsException("Date does not exist!");
+		}
+		return stringDay.toString();
 	}
 
 	/*
-	returns the calories (nonidle) of a specific day
+	returns the calories (nonidle) of a specific day. if date doesn't exist, return 0
 	 */
 	public int getDayCalories(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
+
+		if (myDoc == null) {
+//			throw new IndexOutOfBoundsException("Date does not exist!");
+			return 0;
+		}
+
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
+
+		if (tempArray == null) {
+			return 0;
+		}
 		Document tempDoc = (Document) tempArray.get(0);
-		int calories = (int) tempDoc.get("calories");
+		int calories = 0;
+		if (tempDoc.get("calories") != null) {
+			calories = (int) tempDoc.get("calories");
+		}
 		return calories;
 	}
 
 	/*
-	returns the steps taken of a specific day
+	returns the steps taken of a specific day. if date doesn't exist, return 0
 	 */
 	public int getDaySteps(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
+		if (myDoc == null) {
+//			throw new IndexOutOfBoundsException("Date does not exist!");
+			return 0;
+		}
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
+
+		if (tempArray == null) {
+			return 0;
+		}
 		Document tempDoc = (Document) tempArray.get(0);
-		int steps = (int) tempDoc.get("steps");
+		int steps = 0;
+		if (tempDoc.get("steps") != null) {
+			steps = (int) tempDoc.get("steps");
+		}
 		return steps;
 		//tempObj.getClass().getField("steps");
 	}
@@ -96,7 +131,6 @@ public class MongoDBClient implements IMongoDBClient{
 
 	/*
 		gets range of Calories on dates. Note endDay is exclusive.
-	  TODO: testing for non-existent dates // dates out of range
 	 */
 	public int getRangeCalories(String startDay, String endDay) {
 		return rangeCaloriesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
@@ -104,12 +138,15 @@ public class MongoDBClient implements IMongoDBClient{
 
 	/*
 	helper function for iterating through dates and getting calories
-	TODO: can probably be abstracted more for DRY principals
 	 */
 	public int rangeCaloriesIterator(LocalDate start, LocalDate end) {
+		if (!start.isBefore(end)) {
+			throw new IndexOutOfBoundsException("End date is not before start date!");
+		}
 		int totalCalories = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-			//System.out.println(date.toString().replaceAll("-",""));
+//			System.out.println(date.toString().replaceAll("-",""));
+// 			System.out.println(getDayCalories(date.toString().replaceAll("-","")));
 			totalCalories += getDayCalories(date.toString().replaceAll("-",""));
 		}
 		return totalCalories;
@@ -117,7 +154,6 @@ public class MongoDBClient implements IMongoDBClient{
 
 	/*
   gets range of steps on dates. Note endDay is exclusive.
-  TODO: testing for non-existent dates // dates out of range
  */
 	public int getRangeSteps(String startDay, String endDay) {
 		return rangeStepsIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
@@ -125,9 +161,11 @@ public class MongoDBClient implements IMongoDBClient{
 
 	/*
 	helper function for iterating through dates and getting steps
-	TODO: can probably be abstracted more for DRY principals
  */
 	public int rangeStepsIterator(LocalDate start, LocalDate end) {
+		if (!start.isBefore(end)) {
+			throw new IndexOutOfBoundsException("End date is not before start date!");
+		}
 		int totalSteps = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
 			//System.out.println(date.toString().replaceAll("-",""));

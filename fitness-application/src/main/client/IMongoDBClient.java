@@ -11,12 +11,12 @@ public interface IMongoDBClient {
 	/*
 	gets count of documents in collection
 	 */
-	public void getCount();
+	public int getCount();
 
 	/*
 	prints all documents in collection in Json format
 	 */
-	public void printAll();
+	public String printAll();
 
 	/*
 	returns document of specific day
@@ -27,7 +27,7 @@ public interface IMongoDBClient {
 	/*
 	prints specific day in Json format
 	 */
-	public void printDay(String day);
+	public String printDay(String day);
 
 	/*
 	returns the calories (nonidle) of a specific day
