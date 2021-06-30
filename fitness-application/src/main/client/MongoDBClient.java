@@ -6,12 +6,18 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import ch.qos.logback.classic.Logger;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import org.bson.Document;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class MongoDBClient implements IMongoDBClient{
@@ -21,10 +27,20 @@ public class MongoDBClient implements IMongoDBClient{
 	public static final String COLLECTION_NAME = "Project";
 	public static MongoCollection<Document> collection;
 
+
 	public boolean setup() {
-		MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
-		MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-		collection = database.getCollection(COLLECTION_NAME);
+		try {
+			MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+			MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+			collection = database.getCollection(COLLECTION_NAME);
+
+			LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+			Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
+			rootLogger.setLevel(Level.OFF);
+		} catch (Exception e) {
+			System.out.print(e.getStackTrace());
+			return false;
+		}
 		return true;
 	}
 
