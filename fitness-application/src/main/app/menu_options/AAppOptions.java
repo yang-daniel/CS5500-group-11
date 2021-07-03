@@ -22,12 +22,23 @@ public abstract class AAppOptions {
     this.exitInt = 0;
     this.client = client;
   }
+
+  /**
+   * @return name of the app option
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Starts up the menu.
+   */
   abstract public void run();
 
+  /**
+   * Requests the date from the user.
+   * @return the date in yyyyMMdd format
+   */
   protected String collectDate() {
     int day = this.key.readInteger("Day: ", "Error: Invalid input", 1, 31);
     int month = this.key.readInteger("Month: ", "Error: Invalid input", 1, 12);
@@ -45,6 +56,14 @@ public abstract class AAppOptions {
     return year + "" + strMonth + "" + strDay;
   }
 
+  /**
+   * Displays the given options list as...
+   * name in all caps
+   * equal signs as long as name length
+   * options with selection numbers
+   * exit option
+   * @param options
+   */
   protected void displayOptions(String[] options) {
     System.out.println();
     System.out.println(this.name.toUpperCase());
