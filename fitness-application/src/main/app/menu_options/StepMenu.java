@@ -29,14 +29,14 @@ public class StepMenu extends AAppOptions{
 
                 if (chosenOption == 1) {
                     System.out.println("Please enter the date you would like to see:");
-                    String date = this.collectDate();
+                    String date = this.collectDate(true, true);
                     int steps = this.client.getDaySteps(date);
                     System.out.println("There were " + steps + " steps taken on that day.");
                 } else if (chosenOption == 2) {
                     System.out.println("Please enter the start date of the time period you would like to see:");
-                    String startDate = this.collectDate();
+                    String startDate = this.collectDate(true, true);
                     System.out.println("Please enter the end date of the time period you would like to see:");
-                    String endDate = this.collectDate();
+                    String endDate = this.collectDate(true, true);
                     int steps = this.client.getRangeSteps(startDate, endDate);
                     System.out.println("There were " + steps + " steps taken in that date range.");
                 }

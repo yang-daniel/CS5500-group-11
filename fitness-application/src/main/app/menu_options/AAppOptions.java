@@ -36,24 +36,23 @@ public abstract class AAppOptions {
   abstract public void run();
 
   /**
-   * Requests the date from the user.
+   * Requests the date from the user. If getDay is false, returns day as 01. If getMonth is false, returns month as 01.
    * @return the date in yyyyMMdd format
    */
-  protected String collectDate() {
-    int day = this.key.readInteger("Day: ", "Error: Invalid input", 1, 31);
-    int month = this.key.readInteger("Month: ", "Error: Invalid input", 1, 12);
+  protected String collectDate(boolean getDay, boolean getMonth) {
+    int day = 1;
+    int month = 1;
+    if (getDay) {
+      day = this.key.readInteger("Day: ", "Error: Invalid input", 1, 31);
+
+    }
+    if (getMonth) {
+      month = this.key.readInteger("Month: ", "Error: Invalid input", 1, 12);
+    }
     int year = this.key.readInteger("Year: ", "Error: Invalid input", 1000, Calendar.getInstance().get(Calendar.YEAR));
     System.out.println("You have entered " + month + "/" + day + "/" + year);
     System.out.println();
-    String strDay = "" + day;
-    String strMonth = "" + month;
-    if (day < 10) {
-        strDay = "0" + day;
-    }
-    if (month < 10) {
-        strMonth = "0" + month;
-    }
-    return year + "" + strMonth + "" + strDay;
+    return this.formatDate(day, month, year);
   }
 
   /**
@@ -75,7 +74,19 @@ public abstract class AAppOptions {
 
     // Print the Exit Option
     System.out.println(this.exitInt + ".  Exit\n");
-}
+  }
+
+  protected String formatDate(int day, int month, int year) {
+    String strDay = "" + day;
+    String strMonth = "" + month;
+    if (day < 10) {
+        strDay = "0" + day;
+    }
+    if (month < 10) {
+        strMonth = "0" + month;
+    }
+    return year + "" + strMonth + "" + strDay;
+  }
   
 }
   
