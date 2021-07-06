@@ -1,7 +1,5 @@
 package main.app.menu_options;
 
-
-import main.app.Keyboard;
 import main.client.IMongoDBClient;
 
 public class CalorieMenu extends AAppOptions {
@@ -30,14 +28,14 @@ public class CalorieMenu extends AAppOptions {
 
                 if (chosenOption == 1) {
                     System.out.println("Please enter the date you would like to see:");
-                    String date = super.collectDate(true, true);
+                    String date = super.formatDate(super.collectDate(true, true));
                     int calBurned = this.client.getDayCalories(date);
                     System.out.println("There were " + calBurned + " calories burned on that day.");
                 } else if (chosenOption == 2) {
                     System.out.println("Please enter the start date of the time period you would like to see:");
-                    String startDate = super.collectDate(true, true);
+                    String startDate = super.formatDate(super.collectDate(true, true));
                     System.out.println("Please enter the end date of the time period you would like to see:");
-                    String endDate = super.collectDate(true, true);
+                    String endDate = super.formatDate(super.collectDate(true, true));
                     int calBurned = this.client.getRangeCalories(startDate, endDate);
                     System.out.println("There were " + calBurned + " calories burned in that date range.");
                 }

@@ -32,15 +32,25 @@ public class RewardMenu extends AAppOptions {
                 if (chosenOption == 1) {
                     int year = Calendar.getInstance().get(Calendar.YEAR);
                     int month = Calendar.getInstance().get(Calendar.MONTH);
-                    int currDay = Calendar.getInstance().get(Calendar.DATE);
+                    int currDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                     String startDay = this.formatDate(1, month, year);
                     String endDay = this.formatDate(currDay, month, year);
                     int calBurned = this.client.getRangeCalories(startDay, endDay);
                     int points = calBurned * 2;
                     System.out.println("You have " + points + " points for this month.");
                 } else if (chosenOption == 2) {
-                    
-                    System.out.println("This feature is not yet available. Please come back another time.");
+                    int[] startDay = this.collectDate(false, true);
+                    String strStartDay = this.formatDate(startDay);
+                    int[] endDay = startDay.clone();
+                    endDay[1] = endDay[1] + 1;
+                    if (endDay[1] > 12) {
+                        endDay[1] = 1;
+                        endDay[0] = endDay[0] + 1;
+                    }
+                    String strEndDay = this.formatDate(endDay);
+                    int calBurned = this.client.getRangeCalories(strStartDay, strEndDay);
+                    int points = calBurned * 2;
+                    System.out.println("You have " + points + " points for the chosen month.");
                 }
             }
         }
