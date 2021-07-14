@@ -35,9 +35,7 @@ public class RewardMenu extends AAppOptions {
                     int currDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                     String startDay = this.formatDate(1, month, year);
                     String endDay = this.formatDate(currDay, month, year);
-                    int calBurned = this.client.getRangeCalories(startDay, endDay);
-                    int points = calBurned * 2;
-                    System.out.println("You have " + points + " points for this month.");
+                    this.calcAndPrintPointsFor(startDay, endDay);
                 } else if (chosenOption == 2) {
                     int[] startDay = this.collectDate(false, true);
                     String strStartDay = this.formatDate(startDay);
@@ -48,9 +46,7 @@ public class RewardMenu extends AAppOptions {
                         endDay[0] = endDay[0] + 1;
                     }
                     String strEndDay = this.formatDate(endDay);
-                    int calBurned = this.client.getRangeCalories(strStartDay, strEndDay);
-                    int points = calBurned * 2;
-                    System.out.println("You have " + points + " points for the chosen month.");
+                    this.calcAndPrintPointsFor(strStartDay, strEndDay);
                 }
             }
         }
@@ -58,6 +54,16 @@ public class RewardMenu extends AAppOptions {
         System.out.println("Taking you back to the main menu...");
         System.out.println();
         
+    }
+
+    private void calcAndPrintPointsFor(String startDay, String endDay) {
+        int calBurned = this.client.getRangeCalories(startDay, endDay);
+        int numDiffActivities = this.client.getRangeActivities(startDay, endDay).size();
+        int caloriePoints = calBurned * 2;
+        int activityPoints = numDiffActivities * 4;
+        System.out.print("You have " + caloriePoints + " points earned from burning calories ");
+        System.out.println("and you have " + activityPoints + " points earned from completing various activities this month.");
+        System.out.println("This gives you a total of " + (caloriePoints + activityPoints) + " points for this month.");
     }
     
 }

@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bson.Document;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -109,10 +113,14 @@ public class MongoDBClient implements IMongoDBClient{
 		if (tempArray == null) {
 			return 0;
 		}
-		Document tempDoc = (Document) tempArray.get(0);
+		
 		int calories = 0;
-		if (tempDoc.get("calories") != null) {
-			calories = (int) tempDoc.get("calories");
+
+		for (int i = 0; i < tempArray.size(); i++) {
+			Document tempDoc = (Document) tempArray.get(i);
+			if (tempDoc.get("calories") != null) {
+				calories += (int) tempDoc.get("calories");
+			}
 		}
 		return calories;
 	}
@@ -137,7 +145,6 @@ public class MongoDBClient implements IMongoDBClient{
 			steps = (int) tempDoc.get("steps");
 		}
 		return steps;
-		//tempObj.getClass().getField("steps");
 	}
 
 	public LocalDate stringToLocalDate(String day) {
@@ -190,5 +197,54 @@ public class MongoDBClient implements IMongoDBClient{
 		return totalSteps;
 	}
 
+	/*
+	returns the calories (nonidle) of a specific day. if date doesn't exist, return 0
+	 */
+	public List<String> getDayActivities(String day) {
+		Document myDoc = collection.find(Filters.eq("date", day)).first();
+		List<String> results = new ArrayList<>();
+
+		if (myDoc == null) {
+//			throw new IndexOutOfBoundsException("Date does not exist!");
+			return results;
+		}
+
+		ArrayList tempArray = (ArrayList) myDoc.get("summary");
+
+		if (tempArray == null) {
+			return results;
+		}
+		for (int i = 0; i < tempArray.size(); i++) {
+			Document tempDoc = (Document) tempArray.get(i);
+			if (tempDoc.get("activity") != null) {
+				String tempActivity = (String) tempDoc.get("activity");
+				if (!results.contains(tempActivity)) {
+					results.add(tempActivity);
+				}
+			}
+		}
+		return results;
+	}
+
+	/*
+		gets range of Calories on dates. Note endDay is exclusive.
+	 */
+	public List<String> getRangeActivities(String startDay, String endDay) {
+		return rangeActivitiesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
+	}
+
+	/*
+	helper function for iterating through dates and getting calories
+	 */
+	private List<String> rangeActivitiesIterator(LocalDate start, LocalDate end) {
+		if (!start.isBefore(end)) {
+			throw new IndexOutOfBoundsException("End date is not before start date!");
+		}
+		Set<String> activities = new HashSet<>();
+		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
+			activities.addAll(getDayActivities(date.toString().replaceAll("-","")));
+		}
+		return new ArrayList<>(activities);
+	}
 
 }

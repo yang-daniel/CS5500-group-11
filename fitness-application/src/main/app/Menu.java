@@ -2,9 +2,11 @@ package main.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import main.app.menu_options.CalorieMenu;
 import main.app.menu_options.AAppOptions;
+import main.app.menu_options.ActivityMenu;
 import main.app.menu_options.RewardMenu;
 import main.app.menu_options.StepMenu;
 import main.client.IMongoDBClient;
@@ -19,6 +21,7 @@ public class Menu {
 
   public static void main(String[] args) {
 
+
     IMongoDBClient client = new MongoDBClient();
     boolean connSuccess = client.setup();
 
@@ -32,6 +35,7 @@ public class Menu {
     AAppOptions calMenu = new CalorieMenu(client);
     AAppOptions stepMenu = new StepMenu(client);
     AAppOptions rewardsMenu = new RewardMenu(client);
+    AAppOptions activitiesMenu = new ActivityMenu(client);
 
     
 
@@ -39,6 +43,7 @@ public class Menu {
     menuOptions.add(calMenu);
     menuOptions.add(stepMenu);
     menuOptions.add(rewardsMenu);
+    menuOptions.add(activitiesMenu);
 
     displayMenu(menuOptions);
 

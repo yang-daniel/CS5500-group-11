@@ -2,6 +2,7 @@ package main.client;
 
 import org.bson.Document;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface IMongoDBClient {
 
@@ -64,4 +65,8 @@ public interface IMongoDBClient {
 	TODO: can probably be abstracted more for DRY principals
  */
 	public int rangeStepsIterator(LocalDate start, LocalDate end);
+
+	public List<String> getDayActivities(String day);
+
+	public List<String> getRangeActivities(String startDay, String endDay);
 }
