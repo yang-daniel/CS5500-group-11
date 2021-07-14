@@ -139,10 +139,12 @@ public class MongoDBClient implements IMongoDBClient{
 		if (tempArray == null) {
 			return 0;
 		}
-		Document tempDoc = (Document) tempArray.get(0);
 		int steps = 0;
-		if (tempDoc.get("steps") != null) {
-			steps = (int) tempDoc.get("steps");
+		for (int i = 0; i < tempArray.size(); i++) {
+			Document tempDoc = (Document) tempArray.get(0);
+			if (tempDoc.get("steps") != null) {
+				steps += (int) tempDoc.get("steps");
+			}
 		}
 		return steps;
 	}

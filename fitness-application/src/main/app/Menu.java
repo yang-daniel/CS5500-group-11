@@ -20,8 +20,6 @@ public class Menu {
 
 
   public static void main(String[] args) {
-
-
     IMongoDBClient client = new MongoDBClient();
     boolean connSuccess = client.setup();
 
