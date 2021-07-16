@@ -2,7 +2,9 @@ package main.app;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import main.app.menu_options.CalorieMenu;
 import main.app.menu_options.AAppOptions;
@@ -18,16 +20,20 @@ import main.client.MongoDBClient;
  */
 public class Menu {
 
+  private static Logger LOGGER = LogManager.getLogger(Menu.class.getName());
+
 
   public static void main(String[] args) {
+
+    LOGGER.info("test");
+    
     IMongoDBClient client = new MongoDBClient();
     boolean connSuccess = client.setup();
 
     if (!connSuccess) {
-      System.out.println("Unable to connect to the database. Please try again later.");
+      LOGGER.error("Unable to connect to the database. Please try again later.");
       return;
     }
-
 
     List<AAppOptions> menuOptions = new ArrayList<AAppOptions>();
     AAppOptions calMenu = new CalorieMenu(client);
@@ -74,8 +80,7 @@ public class Menu {
           menuOptions.size());
 
     }
-    System.out.println("GoodBye....");
-    System.out.println("...........");
+    LOGGER.info("\nGoodBye....\n...........");
 
   }
 
