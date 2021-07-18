@@ -51,6 +51,21 @@ public class MongoDBClient implements IMongoDBClient{
 		return true;
 	}
 
+
+	/*
+	upload single document to db
+	 */
+	public void insertDoc(Document doc) {
+		collection.insertOne(doc);
+	}
+
+	/*
+	upload multiple document to db
+	 */
+	public void insertManyDoc(List<Document> docs) {
+		collection.insertMany(docs);
+	}
+
 	/*
 	gets count of documents in collection
 	 */
@@ -107,8 +122,7 @@ public class MongoDBClient implements IMongoDBClient{
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 
 		if (myDoc == null) {
-//			throw new IndexOutOfBoundsException("Date does not exist!");
-			return 0;
+			throw new IndexOutOfBoundsException("Date does not exist!");
 		}
 
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
@@ -134,8 +148,7 @@ public class MongoDBClient implements IMongoDBClient{
 	public int getDaySteps(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		if (myDoc == null) {
-//			throw new IndexOutOfBoundsException("Date does not exist!");
-			return 0;
+			throw new IndexOutOfBoundsException("Date does not exist!");
 		}
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
 
@@ -144,7 +157,7 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		int steps = 0;
 		for (int i = 0; i < tempArray.size(); i++) {
-			Document tempDoc = (Document) tempArray.get(0);
+			Document tempDoc = (Document) tempArray.get(i);
 			if (tempDoc.get("steps") != null) {
 				steps += (int) tempDoc.get("steps");
 			}
@@ -173,7 +186,11 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		int totalCalories = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-			totalCalories += getDayCalories(date.toString().replaceAll("-",""));
+			try {
+				totalCalories += getDayCalories(date.toString().replaceAll("-",""));
+			} catch (Exception e) {
+				totalCalories += 0;
+			}
 		}
 		return totalCalories;
 	}
@@ -194,7 +211,11 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		int totalSteps = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-			totalSteps += getDaySteps(date.toString().replaceAll("-",""));
+			try {
+				totalSteps += getDaySteps(date.toString().replaceAll("-",""));
+			} catch (Exception e) {
+				totalSteps += 0;
+			}
 		}
 		return totalSteps;
 	}
@@ -207,8 +228,8 @@ public class MongoDBClient implements IMongoDBClient{
 		List<String> results = new ArrayList<>();
 
 		if (myDoc == null) {
-//			throw new IndexOutOfBoundsException("Date does not exist!");
-			return results;
+			throw new IndexOutOfBoundsException("Date does not exist!");
+//			return results;
 		}
 
 		ArrayList tempArray = (ArrayList) myDoc.get("summary");
@@ -244,7 +265,11 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		Set<String> activities = new HashSet<>();
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-			activities.addAll(getDayActivities(date.toString().replaceAll("-","")));
+			try {
+				activities.addAll(getDayActivities(date.toString().replaceAll("-","")));
+			} catch (Exception e) {
+				continue;
+			}
 		}
 		return new ArrayList<>(activities);
 	}

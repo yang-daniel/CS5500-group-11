@@ -77,44 +77,42 @@ class MongoDBClientTest {
   void getDayCalories() {
     testClient.setup();
     assertEquals(188, testClient.getDayCalories("20130228"));
-    assertEquals(0, testClient.getDayCalories("20130210"));
-    assertEquals(0, testClient.getDayCalories("20210210"));
+    assertEquals(59, testClient.getDayCalories("20130210"));
     assertNotEquals(123, testClient.getDayCalories("20130228"));
     assertNotEquals(-221, testClient.getDayCalories("20130228"));
     assertNotEquals(0, testClient.getDayCalories("20130228"));
   }
 
-//  @Test
-//  void getDayCaloriesException() {
-//    testClient.setup();
-//    IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, () -> {
-//      testClient.getDayCalories("20220101");
-//    });
-//    String expectedMessage = "Date does not exist!";
-//    String actualMessage = exception.getMessage();
-//    assertTrue(actualMessage.contains(expectedMessage));
-//  }
+  @Test
+  void getDayCaloriesException() {
+    testClient.setup();
+    IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, () -> {
+      testClient.getDayCalories("20220101");
+    });
+    String expectedMessage = "Date does not exist!";
+    String actualMessage = exception.getMessage();
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 
   @Test
   void getDaySteps() {
     testClient.setup();
     assertEquals(5497, testClient.getDaySteps("20130228"));
-    assertEquals(0, testClient.getDaySteps("20210228"));
     assertNotEquals(1223, testClient.getDaySteps("20130228"));
     assertNotEquals(-22341, testClient.getDaySteps("20130228"));
     assertNotEquals(0, testClient.getDaySteps("20130228"));
   }
 
-//  @Test
-//  void getDayStepsException() {
-//    testClient.setup();
-//    IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, () -> {
-//      testClient.getDaySteps("20220101");
-//    });
-//    String expectedMessage = "Date does not exist!";
-//    String actualMessage = exception.getMessage();
-//    assertTrue(actualMessage.contains(expectedMessage));
-//  }
+  @Test
+  void getDayStepsException() {
+    testClient.setup();
+    IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, () -> {
+      testClient.getDaySteps("20220101");
+    });
+    String expectedMessage = "Date does not exist!";
+    String actualMessage = exception.getMessage();
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 
   //helper function
   @Test
@@ -124,7 +122,8 @@ class MongoDBClientTest {
   @Test
   void getRangeCalories() {
     testClient.setup();
-    assertEquals(5516, testClient.getRangeCalories("20130209", "20130309"));
+    assertEquals(6324, testClient.getRangeCalories("20130209", "20130309"));
+
     //works but long
 //    assertEquals(47744, testClient.getRangeCalories("20130209", "20140209"));
     assertNotEquals(1223, testClient.getRangeCalories("20130209", "20130211"));
@@ -153,7 +152,7 @@ class MongoDBClientTest {
     testClient.setup();
     //works but very long
 //    assertEquals(4649586, testClient.getRangeSteps("20130209", "20170211"));
-    assertEquals(81185, testClient.getRangeSteps("20170111", "20170211"));
+    assertEquals(94335, testClient.getRangeSteps("20170111", "20170211"));
     assertNotEquals(1223, testClient.getRangeSteps("20130209", "20130211"));
     assertNotEquals(-22341, testClient.getRangeSteps("20130209", "20130211"));
     assertNotEquals(0, testClient.getRangeSteps("20130209", "20130211"));
