@@ -2,11 +2,16 @@ package main.app;
 
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class is for user Input validation.
  *
  */
 public class Keyboard {
+
+  private static Logger LOGGER = LogManager.getLogger(Keyboard.class.getName());
 
   private Scanner in;
 
@@ -32,7 +37,7 @@ public class Keyboard {
     // keep looking until valid input
     while (valid == false) {
       // prompt the user
-      System.out.println(promptMsg);
+      LOGGER.info(promptMsg);
 
       // Grab input from keyboard
       inputString = in.nextLine();
@@ -43,11 +48,11 @@ public class Keyboard {
         if (validNumber >= low && validNumber <= high)
           valid = true;
         else
-          System.out.println(errorMsg);
+          LOGGER.error(errorMsg);
 
       } catch (NumberFormatException e) {
 
-        System.out.println(errorMsg);
+        LOGGER.error(errorMsg);
 
       }
 

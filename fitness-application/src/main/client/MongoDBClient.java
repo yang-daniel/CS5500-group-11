@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
 import org.bson.Document;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +26,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MongoDBClient implements IMongoDBClient{
+
+	private static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MongoDBClient.class.getName());
 
 	public static final String CONNECTION_STRING = "mongodb+srv://dbAdmin:Y28Yl3Y2KPutVfwD@cluster0.03g61.mongodb.net/Activities?retryWrites=true&w=majority";
 	public static final String DATABASE_NAME = "Activities";
@@ -42,7 +45,7 @@ public class MongoDBClient implements IMongoDBClient{
 			Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
 			rootLogger.setLevel(Level.OFF);
 		} catch (Exception e) {
-			System.out.print(e.getStackTrace());
+			LOGGER.error(e.getStackTrace());
 			return false;
 		}
 		return true;
@@ -170,8 +173,6 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		int totalCalories = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-//			System.out.println(date.toString().replaceAll("-",""));
-// 			System.out.println(getDayCalories(date.toString().replaceAll("-","")));
 			totalCalories += getDayCalories(date.toString().replaceAll("-",""));
 		}
 		return totalCalories;
@@ -193,7 +194,6 @@ public class MongoDBClient implements IMongoDBClient{
 		}
 		int totalSteps = 0;
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
-			//System.out.println(date.toString().replaceAll("-",""));
 			totalSteps += getDaySteps(date.toString().replaceAll("-",""));
 		}
 		return totalSteps;

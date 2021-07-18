@@ -2,9 +2,15 @@ package main.app.menu_options;
 
 import java.util.Calendar;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 import main.client.IMongoDBClient;
 
 public class RewardMenu extends AAppOptions {
+
+    private static Logger LOGGER = LogManager.getLogger(RewardMenu.class.getName());
 
     public RewardMenu(IMongoDBClient client) {
         super(client);
@@ -27,7 +33,7 @@ public class RewardMenu extends AAppOptions {
             chosenOption = this.key.readInteger("Enter choice : ", "Error: Invalid input", this.exitInt, options.length);
 
             if (chosenOption != this.exitInt) {
-                System.out.println("You chose to " + options[chosenOption - 1].toLowerCase() + ".");
+                LOGGER.info("\nYou chose to " + options[chosenOption - 1].toLowerCase() + ".");
 
                 if (chosenOption == 1) {
                     int year = Calendar.getInstance().get(Calendar.YEAR);
@@ -50,10 +56,7 @@ public class RewardMenu extends AAppOptions {
                 }
             }
         }
-        System.out.println();
-        System.out.println("Taking you back to the main menu...");
-        System.out.println();
-        
+        LOGGER.info("\n\nTaking you back to the main menu...\n\n");
     }
 
     private void calcAndPrintPointsFor(String startDay, String endDay) {
@@ -61,9 +64,11 @@ public class RewardMenu extends AAppOptions {
         int numDiffActivities = this.client.getRangeActivities(startDay, endDay).size();
         int caloriePoints = calBurned * 2;
         int activityPoints = numDiffActivities * 4;
-        System.out.print("You have " + caloriePoints + " points earned from burning calories ");
-        System.out.println("and you have " + activityPoints + " points earned from completing various activities this month.");
-        System.out.println("This gives you a total of " + (caloriePoints + activityPoints) + " points for this month.");
+        StringBuilder str = new StringBuilder();
+        str.append("\nYou have " + caloriePoints + " points earned from burning calories ");
+        str.append("\nand you have " + activityPoints + " points earned from completing various activities this month.");
+        str.append("\nThis gives you a total of " + (caloriePoints + activityPoints) + " points for this month.");
+        LOGGER.info(str.toString());
     }
     
 }

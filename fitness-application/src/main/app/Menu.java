@@ -24,8 +24,6 @@ public class Menu {
 
 
   public static void main(String[] args) {
-
-    LOGGER.info("test");
     
     IMongoDBClient client = new MongoDBClient();
     boolean connSuccess = client.setup();
@@ -68,9 +66,6 @@ public class Menu {
       printUserChoice(chosenMenuItem);
 
       chosenMenuItem.run();
-
-      System.out.println();
-      System.out.println();
       
 
       // Display menu again.
@@ -90,27 +85,28 @@ public class Menu {
    * @param appOptions - the options of the Menu
    */
   private static void displayMenu(List<AAppOptions> appOptions) {
+    StringBuilder menu = new StringBuilder();
 
     // Display Menu Options
-    System.out.println("M E N U   OPTIONS");
-    System.out.println("=================");
+    menu.append("\nM E N U   OPTIONS");
+    menu.append("\n=================");
 
     // loop through the options
     for (int i = 0; i < appOptions.size(); i++) {
 
       AAppOptions option = appOptions.get(i);
-      System.out.printf("%d.  %s\n", i + 1, option.getName());
+      menu.append(String.format("\n%d.  %s", i + 1, option.getName()));
 
     }
 
     // Print the Exit Option
-    System.out.println("0.  Exit\n");
+    menu.append("\n0.  Exit\n\n");
 
+    LOGGER.info(menu.toString());
   }
 
   private static void printUserChoice(AAppOptions option) {
-    System.out.printf("Here is the option you chose: %s\n", option.getName());
-    System.out.println();
+    LOGGER.info(String.format("Here is the option you chose: %s\n\n", option.getName()));
   }
 
 }

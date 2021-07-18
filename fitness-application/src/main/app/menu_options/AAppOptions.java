@@ -2,6 +2,9 @@ package main.app.menu_options;
 
 import java.util.Calendar;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.app.Keyboard;
 import main.client.IMongoDBClient;
 
@@ -10,6 +13,8 @@ import main.client.IMongoDBClient;
  * Main purpose is reusability.
  */
 public abstract class AAppOptions {
+
+  private static Logger LOGGER = LogManager.getLogger(AAppOptions.class.getName());
 
   protected String name;
   protected Keyboard key;
@@ -50,8 +55,7 @@ public abstract class AAppOptions {
       month = this.key.readInteger("Month: ", "Error: Invalid input", 1, 12);
     }
     int year = this.key.readInteger("Year: ", "Error: Invalid input", 1000, Calendar.getInstance().get(Calendar.YEAR));
-    System.out.println("You have entered " + month + "/" + day + "/" + year);
-    System.out.println();
+    LOGGER.info("\nYou have entered " + month + "/" + day + "/" + year + "\n");
     return new int[]{day, month, year};
   }
 
@@ -64,16 +68,20 @@ public abstract class AAppOptions {
    * @param options
    */
   protected void displayOptions(String[] options) {
-    System.out.println();
-    System.out.println(this.name.toUpperCase());
-    System.out.println(new String(new char[this.name.length()]).replace("\0", "="));
+    StringBuilder display = new StringBuilder();
+
+    display.append("\n");
+    display.append("\n" + this.name.toUpperCase() + "\n");
+    display.append(new String(new char[this.name.length()]).replace("\0", "="));
 
     for (int i = 0; i < options.length; i++) {
-        System.out.printf("%d.  %s\n", i + 1, options[i]);
+        display.append(String.format("%d.  %s\n", i + 1, options[i]));
     }
 
     // Print the Exit Option
-    System.out.println(this.exitInt + ".  Exit\n");
+    display.append(this.exitInt + ".  Exit\n");
+
+    LOGGER.info(display);
   }
 
   /**

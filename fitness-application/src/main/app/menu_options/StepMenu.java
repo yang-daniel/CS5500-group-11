@@ -1,8 +1,13 @@
 package main.app.menu_options;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import main.client.IMongoDBClient;
 
 public class StepMenu extends AAppOptions{
+
+    private static Logger LOGGER = LogManager.getLogger(StepMenu.class.getName());
 
     public StepMenu(IMongoDBClient client) {
         super(client);
@@ -25,28 +30,24 @@ public class StepMenu extends AAppOptions{
             chosenOption = key.readInteger("Enter choice : ", "Error: Invalid input", this.exitInt, options.length);
 
             if (chosenOption != this.exitInt) {
-                System.out.println("You chose to " + options[chosenOption - 1].toLowerCase() + ".");
+                LOGGER.info("\nYou chose to " + options[chosenOption - 1].toLowerCase() + ".");
 
                 if (chosenOption == 1) {
-                    System.out.println("Please enter the date you would like to see:");
+                    LOGGER.info("\nPlease enter the date you would like to see:");
                     String date = this.formatDate(this.collectDate(true, true));
                     int steps = this.client.getDaySteps(date);
-                    System.out.println("There were " + steps + " steps taken on that day.");
+                    LOGGER.info("\nThere were " + steps + " steps taken on that day.");
                 } else if (chosenOption == 2) {
-                    System.out.println("Please enter the start date of the time period you would like to see:");
+                    LOGGER.info("\nPlease enter the start date of the time period you would like to see:");
                     String startDate = super.formatDate(super.collectDate(true, true));
-                    System.out.println("Please enter the end date of the time period you would like to see:");
+                    LOGGER.info("\nPlease enter the end date of the time period you would like to see:");
                     String endDate = super.formatDate(super.collectDate(true, true));
                     int steps = this.client.getRangeSteps(startDate, endDate);
-                    System.out.println("There were " + steps + " steps taken in that date range.");
+                    LOGGER.info("\nThere were " + steps + " steps taken in that date range.");
                 }
             }
         }
-        System.out.println();
-        System.out.println("Taking you back to the main menu...");
-        System.out.println();
-        
-        
+        LOGGER.info("\n\nTaking you back to the main menu...\n\n");
     }
     
 }
