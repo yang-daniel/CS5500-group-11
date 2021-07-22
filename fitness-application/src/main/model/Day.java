@@ -3,6 +3,7 @@ package main.model;
 import java.util.Arrays;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,6 +24,15 @@ public class Day {
   private Arrays[] segments;
   private int caloriesIdle;
   private String lastUpdate;
+
+
+  public Day(@JsonProperty("date") String date, @JsonProperty("activities") Arrays[] activities, @JsonProperty("segments") Arrays[] segments, @JsonProperty("caloriesIdle") int caloriesIdle, @JsonProperty("lastUpdate") String lastUpdate) {
+    this.date = date;
+    this.activities = activities;
+    this.segments = segments;
+    this.caloriesIdle = caloriesIdle;
+    this.lastUpdate = lastUpdate;
+  }
 
   public void setDate(String date) {
     this.date = date;
