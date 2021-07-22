@@ -35,6 +35,7 @@ public class MongoDBClient implements IMongoDBClient{
 	public static MongoCollection<Document> collection;
 
 
+	@Override
 	public boolean setup() {
 		try {
 			MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
@@ -52,6 +53,7 @@ public class MongoDBClient implements IMongoDBClient{
 	}
 
 
+
 	/*
 	upload single document to db
 	 */
@@ -66,9 +68,11 @@ public class MongoDBClient implements IMongoDBClient{
 		collection.insertMany(docs);
 	}
 
+
 	/*
 	gets count of documents in collection
 	 */
+	@Override
 	public int getCount() {
 		return (int) collection.countDocuments();
 	}
@@ -76,6 +80,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	prints all documents in collection in Json format
 	 */
+	@Override
 	public String printAll() {
 		MongoCursor<Document> cursor = collection.find().iterator();
 		StringBuffer allDocs = new StringBuffer();
@@ -93,6 +98,7 @@ public class MongoDBClient implements IMongoDBClient{
 	returns document of specific day
 	format for day is yyyyMMdd
 	 */
+	@Override
 	public Document getDay(String day) {
 		Document myDay = collection.find(Filters.eq("date", day)).first();
 		if (myDay == null) {
@@ -104,6 +110,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	prints specific day in Json format
 	 */
+	@Override
 	public String printDay(String day) {
 		StringBuilder stringDay = new StringBuilder();
 		Document myDay = getDay(day);
@@ -118,6 +125,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	returns the calories (nonidle) of a specific day. if date doesn't exist, return 0
 	 */
+	@Override
 	public int getDayCalories(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 
@@ -145,6 +153,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	returns the steps taken of a specific day. if date doesn't exist, return 0
 	 */
+	@Override
 	public int getDaySteps(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		if (myDoc == null) {
@@ -165,6 +174,7 @@ public class MongoDBClient implements IMongoDBClient{
 		return steps;
 	}
 
+	@Override
 	public LocalDate stringToLocalDate(String day) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		return LocalDate.parse(day, formatter);
@@ -173,6 +183,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 		gets range of Calories on dates. Note endDay is exclusive.
 	 */
+	@Override
 	public int getRangeCalories(String startDay, String endDay) {
 		return rangeCaloriesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}
@@ -180,7 +191,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	helper function for iterating through dates and getting calories
 	 */
-	public int rangeCaloriesIterator(LocalDate start, LocalDate end) {
+	private int rangeCaloriesIterator(LocalDate start, LocalDate end) {
 		if (!start.isBefore(end)) {
 			throw new IndexOutOfBoundsException("End date is not before start date!");
 		}
@@ -198,6 +209,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
   gets range of steps on dates. Note endDay is exclusive.
  */
+	@Override
 	public int getRangeSteps(String startDay, String endDay) {
 		return rangeStepsIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}
@@ -205,7 +217,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	helper function for iterating through dates and getting steps
  */
-	public int rangeStepsIterator(LocalDate start, LocalDate end) {
+	private int rangeStepsIterator(LocalDate start, LocalDate end) {
 		if (!start.isBefore(end)) {
 			throw new IndexOutOfBoundsException("End date is not before start date!");
 		}
@@ -223,6 +235,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	returns the calories (nonidle) of a specific day. if date doesn't exist, return 0
 	 */
+	@Override
 	public List<String> getDayActivities(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		List<String> results = new ArrayList<>();
@@ -252,6 +265,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 		gets range of Calories on dates. Note endDay is exclusive.
 	 */
+	@Override
 	public List<String> getRangeActivities(String startDay, String endDay) {
 		return rangeActivitiesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}

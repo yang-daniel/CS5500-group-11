@@ -8,4 +8,6 @@ import main.model.Day;
 
 public interface DayRepository extends MongoRepository<Day, String> {
 
+    public Day findByDate(String Date);
+
 }

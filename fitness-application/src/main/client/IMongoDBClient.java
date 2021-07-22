@@ -48,11 +48,6 @@ public interface IMongoDBClient {
 	 */
 	public int getRangeCalories(String startDay, String endDay);
 
-	/*
-	helper function for iterating through dates and getting calories
-	TODO: can probably be abstracted more for DRY principals
-	 */
-	public int rangeCaloriesIterator(LocalDate start, LocalDate end);
 
 	/*
   gets range of steps on dates. Note endDay is exclusive.
@@ -60,11 +55,6 @@ public interface IMongoDBClient {
  */
 	public int getRangeSteps(String startDay, String endDay);
 
-	/*
-	helper function for iterating through dates and getting steps
-	TODO: can probably be abstracted more for DRY principals
- */
-	public int rangeStepsIterator(LocalDate start, LocalDate end);
 
 	public List<String> getDayActivities(String day);
 
