@@ -21,10 +21,12 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.bson.Document;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Repository;
 
 
-@SpringBootApplication
+//@SpringBootApplication
 public class MongoDBClient implements IMongoDBClient{
 
 	private static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MongoDBClient.class.getName());
@@ -34,6 +36,9 @@ public class MongoDBClient implements IMongoDBClient{
 	public static final String COLLECTION_NAME = "Project";
 	public static MongoCollection<Document> collection;
 
+//	public static void main(String[] args) {
+//		SpringApplication.run(MongoDBClient.class, args);
+//	}
 
 	public boolean setup() {
 		try {

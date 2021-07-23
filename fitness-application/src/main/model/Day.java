@@ -1,7 +1,7 @@
 package main.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
-import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,26 +10,38 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Getter
-@Setter
-@ToString
-
-@Document(collation = "Project")
+//@Getter
+//@Setter
+//@ToString
+//
+@Document(collection = "Project")
 public class Day {
-
   @Id
+  private String id;
   private String date;
-  private Arrays[] activities;
+  //create summary and segment classes and instead of Arrays[], use List<summary/segments>
+  private Arrays[] summary;
   private Arrays[] segments;
   private int caloriesIdle;
   private String lastUpdate;
+
+  public Day(@JsonProperty("_id") String id, @JsonProperty("date") String date,
+      @JsonProperty("summary") Arrays[] summary, @JsonProperty("segments") Arrays[] segments,
+      @JsonProperty("caloriesIdle") int caloriesIdle, @JsonProperty("lastUpdate") String lastUpdate) {
+    this.id = id;
+    this.date = date;
+    this.summary = summary;
+    this.segments = segments;
+    this.caloriesIdle = caloriesIdle;
+    this.lastUpdate = lastUpdate;
+  }
 
   public void setDate(String date) {
     this.date = date;
   }
 
-  public void setActivities(Arrays[] activities) {
-    this.activities = activities;
+  public void setSummary(Arrays[] summary) {
+    this.summary = summary;
   }
 
   public void setSegments(Arrays[] segments) {
@@ -48,8 +60,8 @@ public class Day {
     return date;
   }
 
-  public Arrays[] getActivities() {
-    return activities;
+  public Arrays[] getSummary() {
+    return summary;
   }
 
   public Arrays[] getSegments() {
@@ -68,7 +80,7 @@ public class Day {
   public String toString() {
     return "Day{" +
         "date='" + date + '\'' +
-        ", activities=" + Arrays.toString(activities) +
+        ", activities=" + Arrays.toString(summary) +
         ", segments=" + Arrays.toString(segments) +
         ", caloriesIdle=" + caloriesIdle +
         ", lastUpdate='" + lastUpdate + '\'' +
