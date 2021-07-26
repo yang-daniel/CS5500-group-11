@@ -185,7 +185,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	helper function for iterating through dates and getting calories
 	 */
-	public int rangeCaloriesIterator(LocalDate start, LocalDate end) {
+	private int rangeCaloriesIterator(LocalDate start, LocalDate end) {
 		if (!start.isBefore(end)) {
 			throw new IndexOutOfBoundsException("End date is not before start date!");
 		}
@@ -210,7 +210,7 @@ public class MongoDBClient implements IMongoDBClient{
 	/*
 	helper function for iterating through dates and getting steps
  */
-	public int rangeStepsIterator(LocalDate start, LocalDate end) {
+	private int rangeStepsIterator(LocalDate start, LocalDate end) {
 		if (!start.isBefore(end)) {
 			throw new IndexOutOfBoundsException("End date is not before start date!");
 		}
