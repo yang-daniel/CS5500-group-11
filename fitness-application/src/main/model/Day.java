@@ -3,6 +3,7 @@ package main.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,13 +21,13 @@ public class Day {
   private String id;
   private String date;
   //create summary and segment classes and instead of Arrays[], use List<summary/segments>
-  private Arrays[] summary;
+  private List<Summary> summary;
   private Arrays[] segments;
   private int caloriesIdle;
   private String lastUpdate;
 
   public Day(@JsonProperty("_id") String id, @JsonProperty("date") String date,
-      @JsonProperty("summary") Arrays[] summary, @JsonProperty("segments") Arrays[] segments,
+      @JsonProperty("summary") List<Summary> summary, @JsonProperty("segments") Arrays[] segments,
       @JsonProperty("caloriesIdle") int caloriesIdle, @JsonProperty("lastUpdate") String lastUpdate) {
     this.id = id;
     this.date = date;
@@ -40,7 +41,7 @@ public class Day {
     this.date = date;
   }
 
-  public void setSummary(Arrays[] summary) {
+  public void setSummary(List<Summary> summary) {
     this.summary = summary;
   }
 
@@ -60,7 +61,7 @@ public class Day {
     return date;
   }
 
-  public Arrays[] getSummary() {
+  public List<Summary> getSummary() {
     return summary;
   }
 
@@ -80,7 +81,7 @@ public class Day {
   public String toString() {
     return "Day{" +
         "date='" + date + '\'' +
-        ", activities=" + Arrays.toString(summary) +
+        ", activities=" + summary.toString() +
         ", segments=" + Arrays.toString(segments) +
         ", caloriesIdle=" + caloriesIdle +
         ", lastUpdate='" + lastUpdate + '\'' +
