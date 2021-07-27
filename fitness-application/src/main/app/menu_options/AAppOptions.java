@@ -73,6 +73,7 @@ public abstract class AAppOptions {
     display.append("\n");
     display.append("\n" + this.name.toUpperCase() + "\n");
     display.append(new String(new char[this.name.length()]).replace("\0", "="));
+    display.append("\n");
 
     for (int i = 0; i < options.length; i++) {
         display.append(String.format("%d.  %s\n", i + 1, options[i]));
