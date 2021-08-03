@@ -37,9 +37,4 @@ public class DayService {
     dayDao.deleteDay(day);
   }
 
-//  private final MongoDBClient dayDao;
-//
-//  public DayService(MongoDBClient dayDao) {
-//    this.dayDao = dayDao;
-//  }
 }
