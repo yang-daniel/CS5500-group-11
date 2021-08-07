@@ -56,7 +56,11 @@ public interface IMongoDBClient {
 	public int getRangeSteps(String startDay, String endDay);
 
 
-	public List<String> getDayActivities(String day);
+	public List<String> getUniqueDayActivities(String day);
 
-	public List<String> getRangeActivities(String startDay, String endDay);
+	public List<String> getUniqueRangeActivities(String startDay, String endDay);
+
+	public List<String> getAllDayActivities(String day);
+
+	public List<String> getAllRangeActivities(String startDay, String endDay);
 }

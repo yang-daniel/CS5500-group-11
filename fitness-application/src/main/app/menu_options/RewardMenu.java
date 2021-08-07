@@ -1,6 +1,8 @@
 package main.app.menu_options;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +26,8 @@ public class RewardMenu extends AAppOptions {
 
         String[] options = new String[2];
 
-        options[0] = "See current points total";
-        options[1] = "See points for a prior month";
+        options[0] = "See current points and badges";
+        options[1] = "See points and badges for a prior month";
         
         while(chosenOption != this.exitInt) {
             super.displayOptions(options);
@@ -42,6 +44,7 @@ public class RewardMenu extends AAppOptions {
                     String startDay = this.formatDate(1, month, year);
                     String endDay = this.formatDate(currDay, month, year);
                     this.calcAndPrintPointsFor(startDay, endDay);
+                    this.calcAndPrintBadgesFor(startDay, endDay);
                 } else if (chosenOption == 2) {
                     int[] startDay = this.collectDate(false, true);
                     String strStartDay = this.formatDate(startDay);
@@ -53,6 +56,7 @@ public class RewardMenu extends AAppOptions {
                     }
                     String strEndDay = this.formatDate(endDay);
                     this.calcAndPrintPointsFor(strStartDay, strEndDay);
+                    this.calcAndPrintBadgesFor(strStartDay, strEndDay);
                 }
             }
         }
@@ -61,7 +65,7 @@ public class RewardMenu extends AAppOptions {
 
     private void calcAndPrintPointsFor(String startDay, String endDay) {
         int calBurned = this.client.getRangeCalories(startDay, endDay);
-        int numDiffActivities = this.client.getRangeActivities(startDay, endDay).size();
+        int numDiffActivities = this.client.getUniqueRangeActivities(startDay, endDay).size();
         int caloriePoints = calBurned * 2;
         int activityPoints = numDiffActivities * 4;
         StringBuilder str = new StringBuilder();
@@ -70,5 +74,55 @@ public class RewardMenu extends AAppOptions {
         str.append("\nThis gives you a total of " + (caloriePoints + activityPoints) + " points for this month.");
         LOGGER.info(str.toString());
     }
+
+    private void calcAndPrintBadgesFor(String startDay, String endDay) {
+        StringBuilder str = new StringBuilder();
+        str.append("Badges earned:");
+        str.append(this.earned10kCalsBadge(startDay, endDay));
+        str.append(this.earned250kStepsBadge(startDay, endDay));
+        str.append(this.earnedVarietyExerciseBadge(startDay, endDay));
+        str.append(this.earned15WalksBadge(startDay, endDay));
+        str.append(this.earned30WalksBadge(startDay, endDay));
+        LOGGER.info(str.toString());
+    }
+
+    private String earned10kCalsBadge(String startDay, String endDay) {
+        if (this.client.getRangeCalories(startDay, endDay) >= 10000) {
+            return "\n - 10,000+ Calorie Burn in One Month!";
+        }
+        return "";
+    }
+
+    private String earned250kStepsBadge(String startDay, String endDay) {
+        if  (this.client.getRangeSteps(startDay, endDay) >= 250000) {
+            return "\n - 250,000+ Steps Taken in One Month!";
+        }
+        return "";
+    }
+
+    private String earnedVarietyExerciseBadge(String startDay, String endDay) {
+        if  (this.client.getUniqueRangeActivities(startDay, endDay).size() >= 3) {
+            return "\n - 3+ Different Activities Completed in One Month!";
+        }
+        return "";
+    }
+
+    private String earned30WalksBadge(String startDay, String endDay) {
+        List<String> allActivities = this.client.getAllRangeActivities(startDay, endDay);
+        if  (Collections.frequency(allActivities, "walking") >= 30) {
+            return "\n - 30 Walks in One Month!";
+        }
+        else return "";
+    }
+
+    private String earned15WalksBadge(String startDay, String endDay) {
+        List<String> allActivities = this.client.getAllRangeActivities(startDay, endDay);
+        if  (Collections.frequency(allActivities, "walking") >= 30) {
+            return "\n - 15 Walks in One Month!";
+        }
+        else return "";
+    }
+
+
     
 }

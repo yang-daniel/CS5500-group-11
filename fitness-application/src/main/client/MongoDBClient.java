@@ -226,9 +226,16 @@ public class MongoDBClient implements IMongoDBClient{
 	}
 
 	/*
-	returns the calories (nonidle) of a specific day. if date doesn't exist, return 0
+	returns the list of unique activities completed on a day
 	 */
-	public List<String> getDayActivities(String day) {
+	public List<String> getUniqueDayActivities(String day) {
+		return new ArrayList<String>(new HashSet<String>(this.getAllDayActivities(day)));
+	}
+
+	/*
+	returns the list of unique activities completed on a day
+	 */
+	public List<String> getAllDayActivities(String day) {
 		Document myDoc = collection.find(Filters.eq("date", day)).first();
 		List<String> results = new ArrayList<>();
 
@@ -246,18 +253,23 @@ public class MongoDBClient implements IMongoDBClient{
 			Document tempDoc = (Document) tempArray.get(i);
 			if (tempDoc.get("activity") != null) {
 				String tempActivity = (String) tempDoc.get("activity");
-				if (!results.contains(tempActivity)) {
-					results.add(tempActivity);
-				}
+				results.add(tempActivity);
 			}
 		}
 		return results;
 	}
 
 	/*
-		gets range of Calories on dates. Note endDay is exclusive.
+		get all names of all unique activities completed in a date range
 	 */
-	public List<String> getRangeActivities(String startDay, String endDay) {
+	public List<String> getUniqueRangeActivities(String startDay, String endDay) {
+		return new ArrayList<String>(new HashSet<String>(rangeActivitiesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay))));
+	}
+
+	/*
+		get all names of all unique activities completed in a date range
+	 */
+	public List<String> getAllRangeActivities(String startDay, String endDay) {
 		return rangeActivitiesIterator(stringToLocalDate(startDay), stringToLocalDate(endDay));
 	}
 
@@ -271,7 +283,7 @@ public class MongoDBClient implements IMongoDBClient{
 		Set<String> activities = new HashSet<>();
 		for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
 			try {
-				activities.addAll(getDayActivities(date.toString().replaceAll("-","")));
+				activities.addAll(getAllDayActivities(date.toString().replaceAll("-","")));
 			} catch (Exception e) {
 				continue;
 			}

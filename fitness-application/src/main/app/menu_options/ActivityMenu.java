@@ -37,14 +37,14 @@ public class ActivityMenu extends AAppOptions {
                 if (chosenOption == 1) {
                     LOGGER.info("\nPlease enter the date you would like to see:");
                     String date = super.formatDate(super.collectDate(true, true));
-                    List<String> activities = this.client.getDayActivities(date);
+                    List<String> activities = this.client.getUniqueDayActivities(date);
                     this.printActivities(activities);
                 } else if (chosenOption == 2) {
                     LOGGER.info("\nPlease enter the start date of the time period you would like to see:");
                     String startDate = super.formatDate(super.collectDate(true, true));
                     LOGGER.info("\nPlease enter the end date of the time period you would like to see:");
                     String endDate = super.formatDate(super.collectDate(true, true));
-                    List<String> activities = this.client.getRangeActivities(startDate, endDate);
+                    List<String> activities = this.client.getUniqueRangeActivities(startDate, endDate);
                     this.printActivities(activities);
                 } 
             }
