@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -19,22 +22,33 @@ public class DayControllerWeb {
     @Autowired
     private DayService dayService;
 
+    @ModelAttribute("day")
+    public Day getDay(@RequestParam(name="date", required=false) String date) {
+        return this.dayService.getDayByDate(date);
+    }
+
     @GetMapping("/web/day")
-    public String getAllDays(@RequestParam( name="date", required=false, defaultValue="World") String date, Model model) {
+    public String getDay() {
+        // model.addAttribute("day", this.dayService.getDayByDate(date));
+        // System.out.println("Day Controller: " + date);
 
-        List<Day> day = dayService.getAllDays();
+        // Take the request and fill this.days;
+        // this.days = dayService.getDayByDate(date);
+        // System.out.println("Day has " + this.days.getCaloriesIdle() + " calories");
 
-        if(day.isEmpty()){
+        // List<Day> day = dayService.getAllDays();
 
-            //model.addAttribute("name", "No Match");
-            model.addAttribute("name", dayService.getAllDays());
-        }
-        else {
-            //model.addAttribute("name", date);
+        // if(day.isEmpty()){
 
-            model.addAttribute("name", dayService.getAllDays());
-            //model.addAttribute("name", day.get().getDate());
-        }
+        //     //model.addAttribute("name", "No Match");
+        //     model.addAttribute("name", dayService.getAllDays());
+        // }
+        // else {
+        //     //model.addAttribute("name", date);
+
+        //     model.addAttribute("name", dayService.getAllDays());
+        //     //model.addAttribute("name", day.get().getDate());
+        // }
 
         return "day";
     }

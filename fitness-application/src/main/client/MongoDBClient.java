@@ -33,7 +33,8 @@ public class MongoDBClient implements IMongoDBClient{
 
 
 
-	public static final String CONNECTION_STRING = "mongodb://127.0.0.1:27017";
+	// public static final String CONNECTION_STRING = "mongodb://127.0.0.1:27017";
+	public static final String CONNECTION_STRING = "mongodb+srv://dbAdmin:Y28Yl3Y2KPutVfwD@cluster0.03g61.mongodb.net";
 	public static final String DATABASE_NAME = "test";
 	public static final String COLLECTION_NAME = "Activities";
 	public static MongoCollection<Document> collection;

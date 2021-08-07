@@ -172,7 +172,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>app.App</mainClass>
+                                <mainClass>MainApplication</mainClass>
                             </manifest>
                         </archive>
                         <descriptorRefs>
@@ -185,7 +185,7 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>1.2.1</version>
                     <configuration>
-                        <mainClass>app.App</mainClass>
+                        <mainClass>MainApplication</mainClass>
                         <arguments>
                         </arguments>
                     </configuration>
