@@ -6,6 +6,7 @@ import main.app.service.DayService;
 import main.client.IMongoDBClient;
 import main.client.MongoDBClient;
 import main.model.Day;
+import main.model.Summary;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +41,7 @@ public class DayControllerWeb {
     //         return this.dayService.getDayByDate(date + "01");
     //     }
     //     return this.dayService.getDayByDate(date);
-    // }
+    // 
 
     @GetMapping("/web/day/{date}")
     public String getDay(@PathVariable("date") String date, Model model) {
@@ -83,7 +85,29 @@ public class DayControllerWeb {
 
     @GetMapping("web/day/{date}/calories")
     public String getCalories(@PathVariable("date") String date, Model model) {
-        model.addAttribute("day", this.dayService.getDayByDate(date));
+        Day d = this.dayService.getDayByDate(date);
+        model.addAttribute("day", d);
+        model.addAttribute("listsum", d.getSummary());
+
+        List<Day> listsum = new ArrayList<>();
+        if (date.length() == 8) {
+            String mthYear = date.substring(0, 6);
+            for (int i = 1; i < 32; i++ ) {
+                String mthDate = mthYear;
+                if (i < 10) {
+                    mthDate += ("0" + i);
+                } else {
+                    mthDate += i;
+                }
+                Day mthD = this.dayService.getDayByDate(mthDate);
+                if (mthD != null) {
+                    listsum.add(mthD);
+                } else {
+                    System.out.println(mthDate);
+                }
+            }
+        }
+        model.addAttribute("monthSum", listsum);
         return "calories";
     }
 }
