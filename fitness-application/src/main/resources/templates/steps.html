@@ -2,13 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Trial number 1 of displaying DATE, Steps and Calories</title>
+    <title>Steps Page</title>
 </head>
 <body>
 
 <p th:text="'Welcome to the Steps Page'" />
 
+<p th:text="'Viewing ' + ${day.date}" />
 <p th:text="'Steps Taken ' + ${day}" />
+
+<p th:text="'Monthly summary ' + ${day}" />
 
 </body>
 </html>
