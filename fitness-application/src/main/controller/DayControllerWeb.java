@@ -67,7 +67,7 @@ public class DayControllerWeb {
         return "day";
     }
 
-    @GetMapping("web/rewards/{month}")
+    @GetMapping("web/day/{date}/rewards")
     public String getRewards(@PathVariable("date") String date, Model model) {
         model.addAttribute("day", this.dayService.getDayByDate(date));
 
