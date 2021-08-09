@@ -2,13 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Trial number 1 of displaying DATE, Steps and Calories</title>
+    <title>Day Home</title>
 </head>
-<body>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+            <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h1>My Fitness App</h1>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                <li th:classappend="${module == 'calories' ? 'active' : ''}">
+                    <a href="#" th:href="@{/web/day/calories}">Calories</a>
+                </li>
+                <li th:classappend="${module == 'steps' ? 'active' : ''}">
+                    <a href="#" th:href="'@{/web/day/steps}'">Steps</a>
+                </li>
+                <li th:classappend="${module == 'rewards' ? 'active' : ''}">
+                    <a href="#" th:href="@{/web/day/rewards}">Rewards</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </div>
 
-<p th:text="'Hello  World..... '" />
+        <p th:text="'Hello  World..... '" />
 
-<p th:text="'Day data: ' + ${day}" />
+        <p th:text="'Day data: ' + ${day}" /> 
 
-</body>
+    </body>
 </html>

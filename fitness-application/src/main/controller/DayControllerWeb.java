@@ -102,8 +102,6 @@ public class DayControllerWeb {
                 Day mthD = this.dayService.getDayByDate(mthDate);
                 if (mthD != null) {
                     listsum.add(mthD);
-                } else {
-                    System.out.println(mthDate);
                 }
             }
         }

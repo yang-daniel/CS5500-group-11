@@ -5,33 +5,34 @@
     <title>Calories Page</title>
 </head>
     <body>
-
-        <p th:text="'Welcome to the Calories Page'" />
-
-        <p th:text="'Viewing ' + ${day.date}" />
         
+        <h1>Welcome to the Calories Page</h1>
 
-        <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <td>Activity</td>
-                <td>Calories</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:if="${listsum.empty}">
-                <td colspan="8">No tasks</td>
-              </tr>
-              <tr aria-colspan="4" th:each="summary : ${listsum}">
-                <td th:text="${summary.activity}"></td>
-                <td th:text="${summary.calories}"></td>
-              </tr>
-            </tbody>
-        </table>
-        <p th:text="'Idle Calories: ' + ${day.caloriesIdle}" />
+        <div>                           
+            <p th:text="'Viewing ' + ${day.date}" />
 
-        <p th:text="'Monthly summary: '" />
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <td>Activity</td>
+                    <td>Calories</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${listsum.empty}">
+                    <td colspan="8">No tasks</td>
+                </tr>
+                <tr aria-colspan="4" th:each="summary : ${listsum}">
+                    <td th:text="${summary.activity}"></td>
+                    <td th:text="${summary.calories}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <p th:text="'Idle Calories: ' + ${day.caloriesIdle}" />
+        </div>
+
         <div>
+            <p th:text="'Monthly summary: '" />
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
