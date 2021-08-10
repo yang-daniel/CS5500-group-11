@@ -6,7 +6,7 @@
 </head>
     <body>
 
-        <p th:text="'Welcome to the Steps Page'" />
+        <h1>Welcome to the Steps Page </h1>
 
         <div>                           
             <p th:text="'Viewing ' + ${day.date}" />
@@ -15,7 +15,7 @@
                 <thead>
                 <tr>
                     <td>Activity</td>
-                    <td>Calories</td>
+                    <td>Steps</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,14 +24,14 @@
                 </tr>
                 <tr aria-colspan="4" th:each="summary : ${listsum}">
                     <td th:text="${summary.activity}"></td>
-                    <td th:text="${summary.calories}"></td>
+                    <td th:text="${summary.steps}"></td>
                 </tr>
                 </tbody>
             </table>
-            <p th:text="'Idle Calories: ' + ${day.caloriesIdle}" />
+            <p th:text="'Total Steps: ' + ${total_steps}" />
         </div>
 
-        <div>
+        <!-- <div>
             <p th:text="'Monthly summary: '" />
             <table class="table table-bordered table-striped">
                 <thead>
@@ -50,7 +50,7 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+        </div> -->
 
     </body>
 </html>

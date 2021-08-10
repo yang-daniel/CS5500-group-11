@@ -71,15 +71,81 @@ public class DayControllerWeb {
 
     @GetMapping("web/day/{date}/rewards")
     public String getRewards(@PathVariable("date") String date, Model model) {
-        model.addAttribute("day", this.dayService.getDayByDate(date));
+        Day d = this.dayService.getDayByDate(date);
+        model.addAttribute("day", d);
 
+        try {
+            model.addAttribute("listsum", d.getSummary());
+        } catch (Exception e) {
+            model.addAttribute("listsum", "No data for input");
+        }
         
+        int totalSteps = 0;
+        List<Summary> summaries = d.getSummary();
+        for (Summary s : summaries) {
+            if (s.getActivity().equals("walking")) {
+                totalSteps += s.getSteps();
+            }
+        }
+        model.addAttribute("total_steps", totalSteps);
+
+        List<Day> listsum = new ArrayList<>();
+        if (date.length() == 8) {
+            String mthYear = date.substring(0, 6);
+            for (int i = 1; i < 32; i++ ) {
+                String mthDate = mthYear;
+                if (i < 10) {
+                    mthDate += ("0" + i);
+                } else {
+                    mthDate += i;
+                }
+                Day mthD = this.dayService.getDayByDate(mthDate);
+                if (mthD != null) {
+                    listsum.add(mthD);
+                }
+            }
+        }
+        model.addAttribute("monthSum", listsum);
         return "rewards";
     }
 
     @GetMapping("web/day/{date}/steps")
     public String getSteps(@PathVariable("date") String date, Model model) {
-        model.addAttribute("day", this.dayService.getDayByDate(date));
+        Day d = this.dayService.getDayByDate(date);
+        model.addAttribute("day", d);
+
+        try {
+            model.addAttribute("listsum", d.getSummary());
+        } catch (Exception e) {
+            model.addAttribute("listsum", "No data for input");
+        }
+        
+        int totalSteps = 0;
+        List<Summary> summaries = d.getSummary();
+        for (Summary s : summaries) {
+            if (s.getActivity().equals("walking")) {
+                totalSteps += s.getSteps();
+            }
+        }
+        model.addAttribute("total_steps", totalSteps);
+
+        List<Day> listsum = new ArrayList<>();
+        if (date.length() == 8) {
+            String mthYear = date.substring(0, 6);
+            for (int i = 1; i < 32; i++ ) {
+                String mthDate = mthYear;
+                if (i < 10) {
+                    mthDate += ("0" + i);
+                } else {
+                    mthDate += i;
+                }
+                Day mthD = this.dayService.getDayByDate(mthDate);
+                if (mthD != null) {
+                    listsum.add(mthD);
+                }
+            }
+        }
+        model.addAttribute("monthSum", listsum);
         return "steps";
     }
 
@@ -87,7 +153,12 @@ public class DayControllerWeb {
     public String getCalories(@PathVariable("date") String date, Model model) {
         Day d = this.dayService.getDayByDate(date);
         model.addAttribute("day", d);
-        model.addAttribute("listsum", d.getSummary());
+
+        try {
+            model.addAttribute("listsum", d.getSummary());
+        } catch (Exception e) {
+            model.addAttribute("listsum", "No data for input");
+        }
 
         List<Day> listsum = new ArrayList<>();
         if (date.length() == 8) {

@@ -59,6 +59,19 @@ public class MongoDBClient implements IMongoDBClient{
 		return true;
 	}
 
+	public boolean resetAndFillRewardsCollection() {
+		// TODO: create and fill rewards collection
+		try {
+			MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+			MongoDatabase database = mongoClient.getDatabase("test");
+			collection = database.getCollection("Rewards");
+		} catch (Exception e) {
+			LOGGER.error(e.getStackTrace());
+			return false;
+		}
+		return true;
+	}
+
 
 	/*
 	upload single document to db

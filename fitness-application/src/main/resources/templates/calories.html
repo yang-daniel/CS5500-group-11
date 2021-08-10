@@ -7,50 +7,54 @@
     <body>
         
         <h1>Welcome to the Calories Page</h1>
+        <!-- <td th:if="${day == null}">
+            <tr th:text="'No data for date. Please try again.'"></tr>
+        </td> -->
+        <td th:if="${day != null}">
+            <div>                           
+                <p th:text="'Viewing ' + ${day.date}" />
 
-        <div>                           
-            <p th:text="'Viewing ' + ${day.date}" />
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td>Activity</td>
+                        <td>Calories</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${listsum.empty}">
+                        <td colspan="8">No tasks</td>
+                    </tr>
+                    <tr aria-colspan="4" th:each="summary : ${listsum}">
+                        <td th:text="${summary.activity}"></td>
+                        <td th:text="${summary.calories}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p th:text="'Idle Calories: ' + ${day.caloriesIdle} ?: 'DATE INVALID'" />
+            </div>
 
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <td>Activity</td>
-                    <td>Calories</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${listsum.empty}">
-                    <td colspan="8">No tasks</td>
-                </tr>
-                <tr aria-colspan="4" th:each="summary : ${listsum}">
-                    <td th:text="${summary.activity}"></td>
-                    <td th:text="${summary.calories}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <p th:text="'Idle Calories: ' + ${day.caloriesIdle}" />
-        </div>
-
-        <div>
-            <p th:text="'Monthly summary: '" />
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <td>Date</td>
-                    <td>Idle Calories</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${monthSum.empty}">
-                    <td colspan="8">No activities for the month</td>
-                </tr>
-                <tr aria-colspan="8" th:each="mthDay : ${monthSum}">
-                    <td th:text="${mthDay.date}"></td>
-                    <td th:text="${mthDay.caloriesIdle}"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+            <div>
+                <p th:text="'Monthly summary: '" />
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Idle Calories</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${monthSum.empty}">
+                        <td colspan="8">No activities for the month</td>
+                    </tr>
+                    <tr aria-colspan="8" th:each="mthDay : ${monthSum}">
+                        <td th:text="${mthDay.date}"></td>
+                        <td th:text="${mthDay.caloriesIdle}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
 
     </body>
 </html>
