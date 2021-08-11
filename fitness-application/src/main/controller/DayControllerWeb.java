@@ -46,6 +46,7 @@ public class DayControllerWeb {
     @GetMapping("/web/day/{date}")
     public String getDay(@PathVariable("date") String date, Model model) {
         model.addAttribute("day", this.dayService.getDayByDate(date));
+        model.addAttribute("formatted_date", this.formatDateFancy(date));
         // System.out.println("Day Controller: " + date);
 
         // Take the request and fill this.days;
@@ -73,6 +74,7 @@ public class DayControllerWeb {
     public String getRewards(@PathVariable("date") String date, Model model) {
         Day d = this.dayService.getDayByDate(date);
         model.addAttribute("day", d);
+        model.addAttribute("formatted_date", this.formatDateFancy(date));
 
         try {
             model.addAttribute("listsum", d.getSummary());
@@ -113,6 +115,7 @@ public class DayControllerWeb {
     public String getSteps(@PathVariable("date") String date, Model model) {
         Day d = this.dayService.getDayByDate(date);
         model.addAttribute("day", d);
+        model.addAttribute("formatted_date", this.formatDateFancy(date));
 
         try {
             model.addAttribute("listsum", d.getSummary());
@@ -153,6 +156,7 @@ public class DayControllerWeb {
     public String getCalories(@PathVariable("date") String date, Model model) {
         Day d = this.dayService.getDayByDate(date);
         model.addAttribute("day", d);
+        model.addAttribute("formatted_date", this.formatDateFancy(date));
 
         try {
             model.addAttribute("listsum", d.getSummary());
@@ -178,5 +182,13 @@ public class DayControllerWeb {
         }
         model.addAttribute("monthSum", listsum);
         return "calories";
+    }
+
+    private String formatDateFancy(String date) {
+        if (date.length() != 8) {
+            return "";
+        }
+
+        return date.substring(4, 6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4);
     }
 }

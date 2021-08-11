@@ -8,7 +8,7 @@
         <h1>Welcome to the Rewards Page </h1>
 
         <div>                           
-            <p th:text="'Viewing ' + ${day.date}" />
+            <p th:text="'Viewing ' + ${formatted_date}" />
 
             <table class="table table-bordered table-striped">
                 <thead>
@@ -23,11 +23,11 @@
                 </tr>
                 <tr aria-colspan="4" th:each="summary : ${listsum}">
                     <td th:text="${summary.activity}"></td>
-                    <td th:text="${summary.steps}"></td>
+                    <td th:text="(${summary.calories} * 2)"></td>
                 </tr>
                 </tbody>
             </table>
-            <p th:text="'Total Points: ' + (${total_steps} * 4)" />
+            <p th:text="'Bonus Points: ' + (${day.caloriesIdle} * 4)" />
         </div>
 
         <!-- <div>
