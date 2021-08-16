@@ -9,13 +9,13 @@
         <h1>Welcome to the Steps Page </h1>
 
         <div>                           
-            <p th:text="'Viewing ' + ${day.date}" />
+            <p th:text="'Viewing ' + ${#strings.substring(day.date,4,6)} + '/' + ${#strings.substring(day.date,6,8)} + '/' + ${#strings.substring(day.date,0,4)}" />
 
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" style="width:200px">
                 <thead>
                 <tr>
-                    <td>Activity</td>
-                    <td>Steps</td>
+                    <td><b>Activity</b></td>
+                    <td><b>Steps</b></td>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,29 +28,30 @@
                 </tr>
                 </tbody>
             </table>
-            <p th:text="'Total Steps: ' + ${total_steps}" />
+            <p th:text="'Total Steps: ' + ${#aggregates.sum(day.summary.![steps])}" />
         </div>
 
-        <!-- <div>
+        <div>
             <p th:text="'Monthly summary: '" />
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" style="width:400px">
                 <thead>
                 <tr>
-                    <td>Date</td>
-                    <td>Idle Calories</td>
+                    <td><b>Date</b></td>
+                    <td><b>Total Steps</b></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${monthSum.empty}">
-                    <td colspan="8">No activities for the month</td>
+                    <td colspan="2">No steps for the month</td>
                 </tr>
-                <tr aria-colspan="8" th:each="mthDay : ${monthSum}">
-                    <td th:text="${mthDay.date}"></td>
-                    <td th:text="${mthDay.caloriesIdle}"></td>
+                <tr aria-colspan="2" th:each="mthDay : ${monthSum}">
+                    <td th:text="${#strings.substring(mthDay.date,4,6)} + '/' + ${#strings.substring(mthDay.date,6,8)} + '/' + ${#strings.substring(mthDay.date,0,4)}"></td>
+                    <td th:text="${#aggregates.sum(mthDay.summary.![steps])}"></td>
                 </tr>
+
                 </tbody>
             </table>
-        </div> -->
+        </div>
 
     </body>
 </html>
