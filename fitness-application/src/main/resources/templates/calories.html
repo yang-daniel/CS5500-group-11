@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calories Page</title>
+</head>
+    <body>
+        
+        <h1>Welcome to the Calories Page</h1>
+        <!-- <td th:if="${day == null}">
+            <tr th:text="'No data for date. Please try again.'"></tr>
+        </td> -->
+        <td th:if="${day != null}">
+            <div>                           
+                <p th:text="'Viewing ' + ${#strings.substring(day.date,4,6)} + '/' + ${#strings.substring(day.date,6,8)} + '/' + ${#strings.substring(day.date,0,4)}" />
+                <!-- date.substring(4, 6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4) -->
+
+                <table class="table table-bordered table-striped" style="width:200px">
+                    <thead>
+                    <tr>
+                        <td><b>Activity</b></td>
+                        <td><b>Calories</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${listsum.empty}">
+                        <td colspan="3">No tasks</td>
+                    </tr>
+                    <tr aria-colspan="3" th:each="summary : ${listsum}">
+                        <td th:text="${summary.activity}"></td>
+                        <td th:text="${summary.calories}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p th:text="'Idle Calories: ' + ${day.caloriesIdle} ?: 'DATE INVALID'" />
+                <p th:text="'Total Calories: ' + (${day.caloriesIdle} + ${#aggregates.sum(day.summary.![calories])})"></p>
+            </div>
+
+            <div>
+                <p th:text="'Monthly summary: '" />
+                <table class="table table-bordered table-striped" style="width:400px">
+                    <thead>
+                    <tr>
+                        <td><b>Date</b></td>
+                        <td><b>Active Calories</b></td>
+                        <td><b>Idle Calories</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${monthSum.empty}">
+                        <td colspan="3">No activities for the month</td>
+                    </tr>
+                    <tr aria-colspan="3" th:each="mthDay : ${monthSum}">
+                        <td th:text="${#strings.substring(mthDay.date,4,6)} + '/' + ${#strings.substring(mthDay.date,6,8)} + '/' + ${#strings.substring(mthDay.date,0,4)}"></td>
+                        <td th:text="${#aggregates.sum(mthDay.summary.![calories])}"></td>
+                        <td th:text="${mthDay.caloriesIdle}"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </td>
+
+    </body>
+</html>

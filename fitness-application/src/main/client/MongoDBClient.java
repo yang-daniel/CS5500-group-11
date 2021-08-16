@@ -31,7 +31,10 @@ public class MongoDBClient implements IMongoDBClient{
 
 	private static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(MongoDBClient.class.getName());
 
-	public static final String CONNECTION_STRING = "mongodb+srv://dbAdmin:Y28Yl3Y2KPutVfwD@cluster0.03g61.mongodb.net/Activities?retryWrites=true&w=majority";
+
+
+	// public static final String CONNECTION_STRING = "mongodb://127.0.0.1:27017";
+	public static final String CONNECTION_STRING = "mongodb+srv://dbAdmin:Y28Yl3Y2KPutVfwD@cluster0.03g61.mongodb.net";
 	public static final String DATABASE_NAME = "Activities";
 	public static final String COLLECTION_NAME = "Project";
 	public static MongoCollection<Document> collection;
@@ -49,6 +52,19 @@ public class MongoDBClient implements IMongoDBClient{
 			LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 			Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
 			rootLogger.setLevel(Level.OFF);
+		} catch (Exception e) {
+			LOGGER.error(e.getStackTrace());
+			return false;
+		}
+		return true;
+	}
+
+	public boolean resetAndFillRewardsCollection() {
+		// TODO: create and fill rewards collection
+		try {
+			MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+			MongoDatabase database = mongoClient.getDatabase("test");
+			collection = database.getCollection("Rewards");
 		} catch (Exception e) {
 			LOGGER.error(e.getStackTrace());
 			return false;
