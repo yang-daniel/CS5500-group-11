@@ -5,7 +5,8 @@
     <title>Day Home</title>
 </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+        <h1>Welcome to our Fitness Application!</h1>
+        <!-- <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
             <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
@@ -29,11 +30,28 @@
                 </ul>
             </div>
             </div>
-        </div>
+        </div> -->
 
-        <p th:text="'Hello  World..... '" />
+        <!-- <p th:text="'Hello  World..... '" /> -->
 
-        <p th:text="'Day data: ' + ${day}" /> 
+        <!-- <p th:text="'Day data: ' + ${day}" />  -->
+        
+        <p th:text="'Please try out our Steps, Calories, and Rewards pages.'" />
+        <!-- <input type="date" th:value="${date}"> -->
 
+        <!-- <p th:text="'Which menu would you like to see?'" />
+        <select th:field="*{page}">
+            <option disabled>Please select...</option>
+            <option th:value="'calories'" th:text="Calories"></option>
+            <option th:value="'rewards'" th:text="Rewards"></option>
+            <option th:value="'steps'" th:text="Steps"></option>
+        </select> -->
+        <!-- <div class="actions">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+            <a th:href="@{/web/day}" class="button">Cancel</a>
+        </div> -->
+
+        
+        
     </body>
 </html>

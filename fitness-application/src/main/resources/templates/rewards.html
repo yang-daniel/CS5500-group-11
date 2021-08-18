@@ -3,57 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Rewards Page</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript"> 
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Day');
+            data.addColumn('number', 'Total Points');
+            data.addColumn('number', 'Points for Date Shown');
+            data.addRows([[${monthDataPoints}]]); 
+
+            // Set chart options
+            var options = {
+                'chart' : {
+                    height : 300
+                },
+                'title':'Monthly Summary',
+                'width':800,
+                'height':500
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
 </head>
     <body>
         <h1>Welcome to the Rewards Page </h1>
+        <td th:if="${day != null}">
+            <div>                           
+                <p th:text="'Viewing ' + ${#strings.substring(day.date,4,6)} + '/' + ${#strings.substring(day.date,6,8)} + '/' + ${#strings.substring(day.date,0,4)}" />
 
-        <div>                           
-            <p th:text="'Viewing ' + ${#strings.substring(day.date,4,6)} + '/' + ${#strings.substring(day.date,6,8)} + '/' + ${#strings.substring(day.date,0,4)}" />
+                <table class="table table-bordered table-striped" style="width:200px">
+                    <thead>
+                    <tr>
+                        <td><b>Activity</b></td>
+                        <td><b>Points</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${listsum.empty}">
+                        <td colspan="8">No tasks</td>
+                    </tr>
+                    <tr aria-colspan="4" th:each="summary : ${listsum}">
+                        <td th:text="${summary.activity}"></td>
+                        <td th:text="(${summary.calories} * 2)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p th:text="'Bonus Points: ' + (${day.caloriesIdle} * 2)" />
+                <p th:text="'Total Points: ' + ((${day.caloriesIdle} + ${#aggregates.sum(day.summary.![calories])}) * 2)" />
+            </div>
 
-            <table class="table table-bordered table-striped" style="width:200px">
-                <thead>
-                <tr>
-                    <td><b>Activity</b></td>
-                    <td><b>Points</b></td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${listsum.empty}">
-                    <td colspan="8">No tasks</td>
-                </tr>
-                <tr aria-colspan="4" th:each="summary : ${listsum}">
-                    <td th:text="${summary.activity}"></td>
-                    <td th:text="(${summary.calories} * 2)"></td>
-                </tr>
-                </tbody>
-            </table>
-            <p th:text="'Bonus Points: ' + (${day.caloriesIdle} * 2)" />
-            <p th:text="'Total Points: ' + ((${day.caloriesIdle} + ${#aggregates.sum(day.summary.![calories])}) * 2)" />
-        </div>
+            <!-- <div>
+                <p th:text="'Monthly summary: '" />
+                <table class="table table-bordered table-striped" style="width:400px">
+                    <thead>
+                    <tr>
+                        <td><b>Date</b></td>
+                        <td><b>Total Points</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${monthSum.empty}">
+                        <td colspan="2">No points for the month</td>
+                    </tr>
+                    <tr aria-colspan="2" th:each="mthDay : ${monthSum}">
+                        <td th:text="${#strings.substring(mthDay.date,4,6)} + '/' + ${#strings.substring(mthDay.date,6,8)} + '/' + ${#strings.substring(mthDay.date,0,4)}"></td>
+                        <td th:text="((${#aggregates.sum(mthDay.summary.![calories])} + ${mthDay.caloriesIdle}) * 2)"></td>
+                    </tr>
 
-        <div>
-            <p th:text="'Monthly summary: '" />
-            <table class="table table-bordered table-striped" style="width:400px">
-                <thead>
-                <tr>
-                    <td><b>Date</b></td>
-                    <td><b>Total Points</b></td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:if="${monthSum.empty}">
-                    <td colspan="2">No points for the month</td>
-                </tr>
-                <tr aria-colspan="2" th:each="mthDay : ${monthSum}">
-                    <td th:text="${#strings.substring(mthDay.date,4,6)} + '/' + ${#strings.substring(mthDay.date,6,8)} + '/' + ${#strings.substring(mthDay.date,0,4)}"></td>
-                    <td th:text="((${#aggregates.sum(mthDay.summary.![calories])} + ${mthDay.caloriesIdle}) * 2)"></td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div> -->
 
 
-
+            <div id="chart_div"></div>
+        </td>
+        <td th:if="${day == null}">
+            <p th:text="'Date provided is invalid, or we do not have data for this date. Please use yyyyMMdd format.'" />
+        </td> 
     </body>
 </html>
