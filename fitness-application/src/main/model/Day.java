@@ -22,12 +22,12 @@ public class Day {
   private String date;
   //create summary and segment classes and instead of Arrays[], use List<summary/segments>
   private List<Summary> summary;
-  private Arrays[] segments;
+  private List<Segments> segments;
   private int caloriesIdle;
   private String lastUpdate;
 
   public Day(@JsonProperty("_id") String id, @JsonProperty("date") String date,
-      @JsonProperty("summary") List<Summary> summary, @JsonProperty("segments") Arrays[] segments,
+      @JsonProperty("summary") List<Summary> summary, @JsonProperty("segments") List<Segments> segments,
       @JsonProperty("caloriesIdle") int caloriesIdle, @JsonProperty("lastUpdate") String lastUpdate) {
     this.id = id;
     this.date = date;
@@ -45,7 +45,7 @@ public class Day {
     this.summary = summary;
   }
 
-  public void setSegments(Arrays[] segments) {
+  public void setSegments(List<Segments> segments) {
     this.segments = segments;
   }
 
@@ -65,7 +65,7 @@ public class Day {
     return summary;
   }
 
-  public Arrays[] getSegments() {
+  public List<Segments> getSegments() {
     return segments;
   }
 
@@ -82,7 +82,7 @@ public class Day {
     return "Day{" +
         "date='" + date + '\'' +
         ", activities=" + summary.toString() +
-        ", segments=" + Arrays.toString(segments) +
+        ", segments=" + segments.toString() +
         ", caloriesIdle=" + caloriesIdle +
         ", lastUpdate='" + lastUpdate + '\'' +
         '}';
